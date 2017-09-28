@@ -24,5 +24,17 @@ public class MainActivity extends AppCompatActivity {
         Observable<String> name = article.nameObservable();
         article.setName("Supercars");
         name.subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
+
+        /*
+            **Observable.map() operator**
+
+            Takes in one value and outputs another value
+
+            Possible to chain as many map() calls as wanted together
+        */
+
+        Observable.just("This is map operator implementation")
+                .map(s -> s + " -Sneh")
+                .subscribe(s -> Log.d(TAG, "onCreate: Map: " + s));
     }
 }
