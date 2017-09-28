@@ -70,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
 
             !!4. Error handling is skipped by Observables and operators,
             Subscribers handle errors.
+
+            !!5. Unchecked Exceptions are automatically forwarded to onError().
+
+            !!6. Even though RxJava has own system for handling errors,
+            checked Exceptions must be handled by developer code. E.g. Try - Catch block.
         */
 
         Article article = new Article();    //¯\_(ツ)_/¯
@@ -182,6 +187,17 @@ public class MainActivity extends AppCompatActivity {
                 (names, desc) -> fi(names, desc))
                 .subscribe(r -> Log.d(TAG, "onCreate: Zip: " + r), r -> Log.e(TAG, "onCreate: Zip: Error!"));
 
+
+        /*
+            **Observable.repeat() operator**
+
+            Resubscribes when it receives onCompleted()
+        */
+
+        mDisposable = Observable.just("This is new data").repeat(5)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Repeat: Main data: " + s), s -> Log.e(TAG, "onCreate: Repeat: Main data: " + s));
     }
 
     @Override
