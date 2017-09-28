@@ -170,6 +170,17 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(i -> Log.d(TAG, "onCreate: From: " + i));
+
+        /*
+            **Observable.zip() operator
+
+            Allows to combine multiple calls together into a single call
+        */
+
+        mDisposable = Observable.zip(article.nameObservable(), article.descriptionObservable(),
+                (names, desc) -> fi(names, desc))
+                .subscribe(r -> Log.d(TAG, "onCreate: Zip: " + r));
+
     }
 
     @Override
@@ -190,5 +201,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Integer[] getIntegersArray() {
         return new Integer[]{1, 20, 300, 4000, 50000};
+    }
+
+    private String fi(String names, String desc) {
+        return String.valueOf(names + ", " + desc);
     }
 }
