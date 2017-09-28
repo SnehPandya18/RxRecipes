@@ -99,10 +99,17 @@ public class MainActivity extends AppCompatActivity {
             specified count, it will stop early.
         */
 
+        /*
+            **Observable.doOnNext() operator**
+
+            Allows us to add extra behaviour each time an item is emitted
+        */
+
         Observable.just(article)
                 .flatMap(d -> article.descriptionObservable())
                 .filter(d -> d != null)
                 .take(5)
+                .doOnNext(s -> Log.d(TAG, "onCreate: DoOnNext: " + s))
                 .subscribe(s -> Log.d(TAG, "onCreate: FlatMap returning particular item: " + s));
 
         /*
