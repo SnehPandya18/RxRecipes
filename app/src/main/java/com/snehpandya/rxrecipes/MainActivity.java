@@ -86,8 +86,15 @@ public class MainActivity extends AppCompatActivity {
             See above -> ¯\_(ツ)_/¯
         */
 
+        /*
+            **Observable.filter() operator**
+
+            Emits only the items that pass a predicate test
+        */
+
         Observable.just(article)
                 .flatMap(d -> article.descriptionObservable())
+                .filter(d -> d != null)
                 .subscribe(s -> Log.d(TAG, "onCreate: FlatMap returning particular item: " + s));
 
         /*
