@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         Observable.just("Hello World").subscribe(s -> Log.d(TAG, "onCreate: Just: " + s));
 
-        Article article = new Article();
+        Article article = new Article();    //¯\_(ツ)_/¯
         Observable<String> name = article.nameObservable();
         article.setName("Supercars");
         name.subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
@@ -77,6 +77,18 @@ public class MainActivity extends AppCompatActivity {
         Observable.just(getIntegersArray())
                 .flatMap(i -> Observable.fromArray(i))
                 .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for Array: " + i));
+
+        /*
+            Observable<String> description = article.descriptionObservable();
+
+            We could explicitly call this method to get the description result,
+            but flatMap lets you call method directly with "article" object!
+            See above -> ¯\_(ツ)_/¯
+        */
+
+        Observable.just(article)
+                .flatMap(d -> article.descriptionObservable())
+                .subscribe(s -> Log.d(TAG, "onCreate: FlatMap returning particular item: " + s));
 
         /*
             **Observable.from() operator**

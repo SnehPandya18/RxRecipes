@@ -20,11 +20,15 @@ public class Article {
         a new Subscriber subscribes
     */
 
-    public io.reactivex.Observable<String> nameObservable() {
+    public Observable<String> nameObservable() {
         return Observable.defer(() -> Observable.just(name));
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Observable<String> descriptionObservable() {
+        return Observable.just("This is article description");
     }
 }
