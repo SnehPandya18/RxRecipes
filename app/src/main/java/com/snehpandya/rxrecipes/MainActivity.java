@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         Observable.just("This is map operator implementation")
                 .map(String::hashCode)
-                .subscribe(s -> Log.d(TAG, "onCreate: Map: " + Integer.toString(s)));
+                .map(i -> Integer.toString(i))
+                .subscribe(s -> Log.d(TAG, "onCreate: Map: " + s));
     }
 }
