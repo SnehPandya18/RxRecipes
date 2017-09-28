@@ -1,6 +1,8 @@
 package com.snehpandya.rxrecipes.model;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by sneh.pandya on 28/09/17.
@@ -21,7 +23,9 @@ public class Article {
     */
 
     public Observable<String> nameObservable() {
-        return Observable.defer(() -> Observable.just(name));
+        return Observable.defer(() -> Observable.just(name))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void setName(String name) {
@@ -30,6 +34,8 @@ public class Article {
 
     public Observable<String> descriptionObservable() {
         return Observable.just("This is article description", "Description is here", "New item",
-                "Great ideas", "Latest technology", "Tagged places", "Celebrities");
+                "Great ideas", "Latest technology", "Tagged places", "Celebrities")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

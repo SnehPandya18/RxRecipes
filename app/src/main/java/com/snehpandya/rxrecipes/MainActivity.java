@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,14 +34,48 @@ public class MainActivity extends AppCompatActivity {
             Emits Items all the time even when no one is listening
             vs
             Only emits items when it has a subscriber
+
+            !!Key idea #4: Operators let you do anything to the stream of data.
         */
 
-        Observable.just("Hello World").subscribe(s -> Log.d(TAG, "onCreate: Just: " + s));
+        /*
+            **Schedulers**
+
+            Everything that runs before the Subscriber runs,
+            is on an I/O thread. In the end, View manipulation
+            happens on the Main thread.
+
+            subscribeOn -> Tells Observable code, which thread to run on
+            observeOn -> Tells Subscriber, which thread to run on
+
+            !!Tip: subscribeOn & observeOn can be attached to any Observable
+            as they are just operators
+         */
+
+        Observable.just("Hello World")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Just: " + s));
+
+        /*
+            **Error handling**
+
+            !!1. onError() is called if an Exception is thrown at any time
+
+            !!2. The operators don't have to handle the Exception
+
+            !!3. We know when the Subscriber has finished receiving items
+
+            !!4. Error handling is skipped by Observables and operators,
+            Subscribers handle errors.
+        */
 
         Article article = new Article();    //¯\_(ツ)_/¯
         Observable<String> name = article.nameObservable();
         article.setName("Supercars");
-        name.subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
+        name.observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
 
         /*
             **Observable.map() operator**
@@ -55,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         Observable.just("This is map operator implementation")
                 .map(String::hashCode)
                 .map(i -> Integer.toString(i))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Map: " + s));
 
         /*
@@ -72,10 +110,14 @@ public class MainActivity extends AppCompatActivity {
 
         Observable.just(getIntegersList())
                 .flatMap(i -> Observable.fromArray(i))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for List: " + i));
 
         Observable.just(getIntegersArray())
                 .flatMap(i -> Observable.fromArray(i))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for Array: " + i));
 
         /*
@@ -110,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
                 .filter(d -> d != null)
                 .take(5)
                 .doOnNext(s -> Log.d(TAG, "onCreate: DoOnNext: " + s))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: FlatMap returning particular item: " + s));
 
         /*
@@ -120,7 +164,10 @@ public class MainActivity extends AppCompatActivity {
             !!Tip: Similar to Observable.just() operator
         */
 
-        Observable.fromArray(new Integer[]{1, 2, 3, 4, 5}).subscribe(i -> Log.d(TAG, "onCreate: From: " + i));
+        Observable.fromArray(new Integer[]{1, 2, 3, 4, 5})
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(i -> Log.d(TAG, "onCreate: From: " + i));
     }
 
     private List<Integer> getIntegersList() {
