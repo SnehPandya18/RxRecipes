@@ -29,6 +29,7 @@ public class Article {
     }
 
     public Observable<String> descriptionObservable() {
-        return Observable.just("This is article description");
+        return Observable.just("This is article description", "Description is here", "New item",
+                "Great ideas", "Latest technology", "Tagged places", "Celebrities");
     }
 }

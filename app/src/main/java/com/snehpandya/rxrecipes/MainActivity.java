@@ -92,9 +92,17 @@ public class MainActivity extends AppCompatActivity {
             Emits only the items that pass a predicate test
         */
 
+        /*
+            **Observable.take() operator**
+
+            Emits the number of items specified. If there are fewer than
+            specified count, it will stop early.
+        */
+
         Observable.just(article)
                 .flatMap(d -> article.descriptionObservable())
                 .filter(d -> d != null)
+                .take(5)
                 .subscribe(s -> Log.d(TAG, "onCreate: FlatMap returning particular item: " + s));
 
         /*
