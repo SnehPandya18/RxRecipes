@@ -197,7 +197,18 @@ public class MainActivity extends AppCompatActivity {
         mDisposable = Observable.just("This is new data").repeat(5)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(s -> Log.d(TAG, "onCreate: Repeat: Main data: " + s), s -> Log.e(TAG, "onCreate: Repeat: Main data: " + s));
+                .subscribe(s -> Log.d(TAG, "onCreate: Repeat: Main data: " + s), s -> Log.e(TAG, "onCreate: Repeat: Error data: " + s));
+
+        /*
+            **Observable.retry() operator**
+
+            Resubscribes when it receives onError()
+        */
+
+        mDisposable = Observable.just("This is error data").retry(3)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Retry: Main data: " + s), s -> Log.e(TAG, "onCreate: Retry: Error data: " + s));
     }
 
     @Override
