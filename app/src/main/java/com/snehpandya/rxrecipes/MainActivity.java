@@ -11,11 +11,13 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG";
+    private Disposable mDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             as they are just operators
          */
 
-        Observable.just("Hello World")
+        mDisposable = Observable.just("Hello World")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Just: " + s));
@@ -73,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
         Article article = new Article();    //¯\_(ツ)_/¯
         Observable<String> name = article.nameObservable();
         article.setName("Supercars");
-        name.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
+        mDisposable = name.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
 
         /*
             **Observable.map() operator**
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             same type as the source Observable
         */
 
-        Observable.just("This is map operator implementation")
+        mDisposable = Observable.just("This is map operator implementation")
                 .map(String::hashCode)
                 .map(i -> Integer.toString(i))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
             Subscriber sees only resultant Observable
         */
 
-        Observable.just(getIntegersList())
+        mDisposable = Observable.just(getIntegersList())
                 .flatMap(i -> Observable.fromArray(i))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for List: " + i));
 
-        Observable.just(getIntegersArray())
+        mDisposable = Observable.just(getIntegersArray())
                 .flatMap(i -> Observable.fromArray(i))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             Allows us to add extra behaviour each time an item is emitted
         */
 
-        Observable.just(article)
+        mDisposable = Observable.just(article)
                 .flatMap(d -> article.descriptionObservable())
                 .filter(d -> d != null)
                 .take(5)
@@ -164,10 +166,16 @@ public class MainActivity extends AppCompatActivity {
             !!Tip: Similar to Observable.just() operator
         */
 
-        Observable.fromArray(new Integer[]{1, 2, 3, 4, 5})
+        mDisposable = Observable.fromArray(new Integer[]{1, 2, 3, 4, 5})
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(i -> Log.d(TAG, "onCreate: From: " + i));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDisposable.dispose();
     }
 
     private List<Integer> getIntegersList() {
