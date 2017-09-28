@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Simple implementation of Observable and Subscriber
+        Observable.just("Hello World").subscribe(s -> Log.d(TAG, "onCreate: Just: " + s));
+
         Article article = new Article();
         Observable<String> name = article.nameObservable();
         article.setName("Supercars");
