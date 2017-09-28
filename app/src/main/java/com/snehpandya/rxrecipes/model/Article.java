@@ -8,10 +8,20 @@ import io.reactivex.Observable;
 
 public class Article {
 
-    private String name = "article";
+    private String name;
+
+    /*
+        **Wrapped Observable.just() with defer()**
+
+        None of the code inside defer() is executed until
+        Subscriber subscribes to this Observable
+
+        !!Drawback: defer() creates new Observable each time
+        a new Subscriber subscribes
+    */
 
     public io.reactivex.Observable<String> nameObservable() {
-        return Observable.just(name);
+        return Observable.defer(() -> Observable.just(name));
     }
 
     public void setName(String name) {

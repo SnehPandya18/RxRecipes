@@ -18,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Article article = new Article();
-        article.setName("Supercars");
         Observable<String> name = article.nameObservable();
-        name.subscribe(p -> Log.d(TAG, "onCreate: " + p));
+        article.setName("Supercars");
+        name.subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
     }
 }
