@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mDisposable = Observable.just("Hello World")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(s -> Log.d(TAG, "onCreate: Just: " + s));
+                .subscribe(s -> Log.d(TAG, "onCreate: Just: " + s), s -> Log.e(TAG, "onCreate: Just: Error!"));
 
         /*
             **Error handling**
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         article.setName("Supercars");
         mDisposable = name.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(p -> Log.d(TAG, "onCreate: Article: " + p));
+                .subscribe(p -> Log.d(TAG, "onCreate: Article: " + p), p -> Log.e(TAG, "onCreate: Article: Error!"));
 
         /*
             **Observable.map() operator**
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 .map(i -> Integer.toString(i))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(s -> Log.d(TAG, "onCreate: Map: " + s));
+                .subscribe(s -> Log.d(TAG, "onCreate: Map: " + s), s -> Log.e(TAG, "onCreate: Map: Error!"));
 
         /*
             **Observable.flatMap() operator**
@@ -114,13 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 .flatMap(i -> Observable.fromArray(i))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for List: " + i));
+                .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for List: " + i), i -> Log.e(TAG, "onCreate: FlatMap for List: Error!"));
 
         mDisposable = Observable.just(getIntegersArray())
                 .flatMap(i -> Observable.fromArray(i))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for Array: " + i));
+                .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for Array: " + i), i -> Log.e(TAG, "onCreate: FlatMap for Array: Error!"));
 
         /*
             Observable<String> description = article.descriptionObservable();
@@ -156,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
                 .doOnNext(s -> Log.d(TAG, "onCreate: DoOnNext: " + s))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(s -> Log.d(TAG, "onCreate: FlatMap returning particular item: " + s));
+                .subscribe(s -> Log.d(TAG, "onCreate: FlatMap returning particular item: " + s),
+                        s -> Log.e(TAG, "onCreate: Flatmap returning particular item: Error!"));
 
         /*
             **Observable.from() operator**
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         mDisposable = Observable.fromArray(new Integer[]{1, 2, 3, 4, 5})
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(i -> Log.d(TAG, "onCreate: From: " + i));
+                .subscribe(i -> Log.d(TAG, "onCreate: From: " + i), i -> Log.e(TAG, "onCreate: From: Error!"));
 
         /*
             **Observable.zip() operator
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDisposable = Observable.zip(article.nameObservable(), article.descriptionObservable(),
                 (names, desc) -> fi(names, desc))
-                .subscribe(r -> Log.d(TAG, "onCreate: Zip: " + r));
+                .subscribe(r -> Log.d(TAG, "onCreate: Zip: " + r), r -> Log.e(TAG, "onCreate: Zip: Error!"));
 
     }
 
