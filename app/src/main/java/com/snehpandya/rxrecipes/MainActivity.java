@@ -31,10 +31,13 @@ public class MainActivity extends AppCompatActivity {
             Takes in one value and outputs another value
 
             Possible to chain as many map() calls as wanted together
+
+            !!Interesting: map() does not have to emit items of the
+            same type as the source Observable
         */
 
         Observable.just("This is map operator implementation")
-                .map(s -> s + " -Sneh")
-                .subscribe(s -> Log.d(TAG, "onCreate: Map: " + s));
+                .map(String::hashCode)
+                .subscribe(s -> Log.d(TAG, "onCreate: Map: " + Integer.toString(s)));
     }
 }
