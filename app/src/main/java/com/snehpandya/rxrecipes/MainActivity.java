@@ -6,6 +6,9 @@ import android.util.Log;
 
 import com.snehpandya.rxrecipes.model.Article;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observable;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +58,27 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(s -> Log.d(TAG, "onCreate: Map: " + s));
 
         /*
+            **Observable.flatMap() operator**
+
+            Takes items emitted by one Observable, transforms them into another Observable
+            Gives newly transformed (resulted) Observable to Subscriber
+
+            !!Tip: Observable.map() applies a function to
+            each item emitted by original Observable whereas,
+            Observable.flatMap() converts one Observable into another
+            and gives resultant Observable as output ->
+            Subscriber sees only resultant Observable
+        */
+
+        Observable.just(getIntegersList())
+                .flatMap(i -> Observable.fromArray(i))
+                .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for List: " + i));
+
+        Observable.just(getIntegersArray())
+                .flatMap(i -> Observable.fromArray(i))
+                .subscribe(i -> Log.d(TAG, "onCreate: FlatMap for Array: " + i));
+
+        /*
             **Observable.from() operator**
 
             Takes a collection of objects/items and emits each of them, one at a time
@@ -63,5 +87,19 @@ public class MainActivity extends AppCompatActivity {
         */
 
         Observable.fromArray(new Integer[]{1, 2, 3, 4, 5}).subscribe(i -> Log.d(TAG, "onCreate: From: " + i));
+    }
+
+    private List<Integer> getIntegersList() {
+        List<Integer> integers = new ArrayList<>();
+        integers.add(1);
+        integers.add(20);
+        integers.add(300);
+        integers.add(4000);
+        integers.add(50000);
+        return integers;
+    }
+
+    private Integer[] getIntegersArray() {
+        return new Integer[]{1, 20, 300, 4000, 50000};
     }
 }
