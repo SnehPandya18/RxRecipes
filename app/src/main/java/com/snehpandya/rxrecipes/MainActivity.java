@@ -289,6 +289,23 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Concat: " + s), s -> Log.e(TAG, "onCreate: Concat: Error!"));
+
+        /*
+            **Observable.merge() operator**
+
+            Merge multiple Observables and emits data stream
+            from Observables, interleaving the outputs
+
+            !!Tip: Merge does not wait for any Observable to
+            finish emitting data, it emits data from all the
+            specified Observables simultaneously as soon as
+            the data becomes available to emit.
+        */
+
+        mDisposable = Observable.merge(article.descriptionObservable(), article.dateObservable())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Merge: " + s), s -> Log.e(TAG, "onCreate: Merge: Error!"));
     }
 
     @Override

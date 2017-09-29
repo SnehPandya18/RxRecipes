@@ -44,6 +44,12 @@ public class Article {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<String> dateObservable() {
+        return Observable.just("July 10", "August 20", "May 22", "February 28")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public List<String> getArticles() {
         SystemClock.sleep(3000);
         return createArticles();
