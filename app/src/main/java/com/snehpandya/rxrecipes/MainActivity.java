@@ -274,6 +274,21 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: TakeLast: " + s), s -> Log.e(TAG, "onCreate: TakeLast: Error!"));
+
+        /*
+            **Observable.concat() operator**
+
+            Concats multiple Observables and emits data stream
+            from Observables, one after another
+
+            !!Tip: Next Observables will start emitting only after
+            the previous Observable has finished emitting data
+        */
+
+        mDisposable = Observable.concat(article.nameObservable(), article.descriptionObservable())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Concat: " + s), s -> Log.e(TAG, "onCreate: Concat: Error!"));
     }
 
     @Override
