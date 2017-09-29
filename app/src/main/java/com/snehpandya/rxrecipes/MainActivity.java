@@ -209,6 +209,18 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Retry: Main data: " + s), s -> Log.e(TAG, "onCreate: Retry: Error data: " + s));
+
+        /*
+            **Observable.fromCallable() operator**
+
+            Used for async calls. Code for emitted value
+            is not run until someone subscribes to the Observable
+        */
+
+        Observable<List<String>> observable = Observable.fromCallable(article::getArticles);
+        mDisposable = observable.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: FromCallable: " + s), s -> Log.e(TAG, "onCreate: FromCallable: Error!"));
     }
 
     @Override

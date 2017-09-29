@@ -1,5 +1,10 @@
 package com.snehpandya.rxrecipes.model;
 
+import android.os.SystemClock;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -37,5 +42,18 @@ public class Article {
                 "Great ideas", "Latest technology", "Tagged places", "Celebrities")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public List<String> getArticles() {
+        SystemClock.sleep(3000);
+        return createArticles();
+    }
+
+    private List<String> createArticles() {
+        List<String> articles = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            articles.add("Article " + i);
+        }
+        return articles;
     }
 }
