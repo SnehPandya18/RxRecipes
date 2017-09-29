@@ -235,6 +235,19 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Skip: " + s), s -> Log.e(TAG, "onCreate: Skip: Error!"));
+
+        /*
+            **Observable.skipLast() operator**
+
+            Skips 'n' number of elements starting from last position
+        */
+
+        mDisposable = Observable.just(getIntegersArray())
+                .flatMap(i -> Observable.fromArray(i))
+                .skipLast(2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: SkipLast: " + s), s -> Log.e(TAG, "onCreate: SkipLast: Error!"));
     }
 
     @Override
