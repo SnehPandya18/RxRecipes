@@ -9,6 +9,7 @@ import com.snehpandya.rxrecipes.model.Article;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -306,6 +307,28 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Merge: " + s), s -> Log.e(TAG, "onCreate: Merge: Error!"));
+
+        /*
+            **Maybe Observable**
+
+            Maybe Observable succeeds with an item,
+            or no item, or errors.
+
+            !!Tip: Maybe emits at most one item.
+        */
+
+        Maybe<List<Integer>> listMaybe = Maybe.create(e -> {
+            List<Integer> list = getIntegersList();
+            if (list != null && !list.isEmpty()) {
+                e.onSuccess(list);
+            } else {
+                e.onComplete();
+            }
+        });
+
+        mDisposable = listMaybe.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Maybe: " + s), s -> Log.e(TAG, "onCreate: Maybe: Error!"));
     }
 
     @Override
