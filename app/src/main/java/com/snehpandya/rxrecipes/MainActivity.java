@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -329,6 +330,23 @@ public class MainActivity extends AppCompatActivity {
         mDisposable = listMaybe.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Maybe: " + s), s -> Log.e(TAG, "onCreate: Maybe: Error!"));
+
+        /*
+            **Single Observable**
+
+            Instead of  onCompleted(),
+                        onNext(),
+                        onError(),
+            it only gives
+                        onSuccess()
+                      & onError()
+        */
+
+        Single<List<Integer>> listSingle = Single.fromCallable(this::getIntegersList);
+
+        mDisposable = listSingle.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Single: " + s), s -> Log.e(TAG, "onCreate: Single: Error!"));
     }
 
     @Override
