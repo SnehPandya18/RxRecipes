@@ -221,6 +221,20 @@ public class MainActivity extends AppCompatActivity {
         mDisposable = observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: FromCallable: " + s), s -> Log.e(TAG, "onCreate: FromCallable: Error!"));
+
+        /*
+            **Observable.skip() operator**
+
+            Skips the first 'n' items emitted by Observable
+            and emits data after 'n' items
+        */
+
+        mDisposable = Observable.just(getIntegersArray())
+                .flatMap(i -> Observable.fromArray(i))
+                .skip(2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Skip: " + s), s -> Log.e(TAG, "onCreate: Skip: Error!"));
     }
 
     @Override
