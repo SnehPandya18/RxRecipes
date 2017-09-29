@@ -261,6 +261,19 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Take: " + s), s -> Log.e(TAG, "onCreate: Take: Error!"));
+
+        /*
+            **Observable.takeLast() operator**
+
+            Emits 'n' number of elements starting from last position
+        */
+
+        mDisposable = Observable.just(getIntegersArray())
+                .flatMap(i -> Observable.fromArray(i))
+                .takeLast(3)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: TakeLast: " + s), s -> Log.e(TAG, "onCreate: TakeLast: Error!"));
     }
 
     @Override
