@@ -328,6 +328,27 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Debounce: " + s), s -> Log.e(TAG, "onCreate: Debounce: Error!"));
 
+
+        /*
+            **Observable.share() operator**
+
+            Allows multiple Subscribers to subscribe
+            to a single Observable. It avoids duplication
+            of expensive operation calls & promises
+            better, cheaper and faster resource utilization.
+        */
+
+        Observable<String> shareObservable = article.descriptionObservable().share();
+
+        shareObservable.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Share: " + s), s -> Log.e(TAG, "onCreate: Share: Error!"));
+
+        shareObservable.take(5)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Share: " + s), s -> Log.e(TAG, "onCreate: Share: Error!"));
+
         /*
             **Maybe Observable**
 
@@ -385,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Integer[] getIntegersArray() {
-        return new Integer[]{1, 20, 300, 4000, 50000};
+        return new Integer[]{100, 200, 300, 400, 500};
     }
 
     private String fi(String names, String desc) {
