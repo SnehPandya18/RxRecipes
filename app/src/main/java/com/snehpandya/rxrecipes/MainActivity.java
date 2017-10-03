@@ -359,6 +359,20 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(s -> Log.d(TAG, "onCreate: Share: " + s), s -> Log.e(TAG, "onCreate: Share: Error!"));
 
         /*
+            **Observable.buffer() operator**
+
+            Periodically gather items emitted by an Observable
+            into bundles and emit these bundles rather than
+            emitting them at once.
+        */
+
+        mDisposable = Observable.just(getIntegersList(), getIntegersList(), getIntegersList())
+                .buffer(2, 2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Buffer: " + s), s -> Log.d(TAG, "onCreate: Buffer: Error!"));
+
+        /*
             **Maybe Observable**
 
             Maybe Observable succeeds with an item,
