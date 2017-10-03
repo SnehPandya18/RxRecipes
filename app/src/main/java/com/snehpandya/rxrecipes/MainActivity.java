@@ -8,6 +8,7 @@ import com.snehpandya.rxrecipes.model.Article;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
@@ -182,13 +183,17 @@ public class MainActivity extends AppCompatActivity {
         /*
             **Observable.zip() operator
 
-            Allows to combine multiple calls together into a single call
+            Allows to combine multiple async calls together into a single call
+
+            When you need a signal that sends a value each time
+            any of its inputs change, use combineLatest.
+            When you need a signal that sends a value only when
+            all of its inputs change, use zip
         */
 
         mDisposable = Observable.zip(article.nameObservable(), article.descriptionObservable(),
                 (names, desc) -> fi(names, desc))
                 .subscribe(r -> Log.d(TAG, "onCreate: Zip: " + r), r -> Log.e(TAG, "onCreate: Zip: Error!"));
-
 
         /*
             **Observable.repeat() operator**
@@ -308,6 +313,20 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Merge: " + s), s -> Log.e(TAG, "onCreate: Merge: Error!"));
+
+        /*
+            **Observable.debounce() operator**
+
+            Emits items from an Observable if a particular
+            time span has passed without it emitting any
+            other item.
+        */
+
+        mDisposable = Observable.just(article.getArticles())
+                .debounce(4, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: Debounce: " + s), s -> Log.e(TAG, "onCreate: Debounce: Error!"));
 
         /*
             **Maybe Observable**
