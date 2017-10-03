@@ -111,11 +111,18 @@ public class MainActivity extends AppCompatActivity {
             Takes items emitted by one Observable, transforms them into another Observable
             Gives newly transformed (resulted) Observable to Subscriber
 
-            !!Tip: Observable.map() applies a function to
+            !!Tip 1: Observable.map() applies a function to
             each item emitted by original Observable whereas,
             Observable.flatMap() converts one Observable into another
             and gives resultant Observable as output ->
             Subscriber sees only resultant Observable
+
+            !!Tip 2: "map" transforms items emitted by an Observable
+            by applying a function to each item whereas "flatmap":
+
+            1. Applies a specified function to each emitted item
+            & this function in turn returns an Observable for each item.
+            2. flatMap then merges all these sequences to make a new sequence.
         */
 
         mDisposable = Observable.just(getIntegersList())
@@ -221,7 +228,9 @@ public class MainActivity extends AppCompatActivity {
             **Observable.fromCallable() operator**
 
             Used for async calls. Code for emitted value
-            is not run until someone subscribes to the Observable
+            is not run until someone subscribes to the Observable.
+
+            !!Tip: fromCallable can handle checked exceptions.
         */
 
         Observable<List<String>> observable = Observable.fromCallable(article::getArticles);
