@@ -16,6 +16,7 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -337,7 +338,6 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Debounce: " + s), s -> Log.e(TAG, "onCreate: Debounce: Error!"));
 
-
         /*
             **Observable.share() operator**
 
@@ -410,6 +410,39 @@ public class MainActivity extends AppCompatActivity {
         mDisposable = listSingle.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(s -> Log.d(TAG, "onCreate: Single: " + s), s -> Log.e(TAG, "onCreate: Single: Error!"));
+
+        /*
+            **Publish Subject**
+
+            PublishSubject emits to a Subscriber
+            only those item which are emitted by
+            the source Observables subsequent to
+            the time of the subscription.
+
+            !!Tip: Subscriber gets only the data
+            from the moment it subscribes.
+        */
+
+        //Create new PublishSubject
+        PublishSubject<Integer> subject = PublishSubject.create();
+
+        //Subscriber 1 subscribes to PublishSubject
+        subject.subscribe(s -> Log.d(TAG, "onCreate: PublishSubject: Subscriber 1: " + s), s -> Log.e(TAG, "onCreate: PublishSubject: Subscriber 1: Error!"));
+
+        //PublishSubject starts emitting data stream
+        subject.onNext(1);
+        subject.onNext(2);
+        subject.onNext(3);
+
+        //Subscriber 2 subscribes to PublishSubject
+        subject.subscribe(d -> Log.d(TAG, "onCreate: PublishSubject: Subscriber 2: " + d), d -> Log.e(TAG, "onCreate: PublishSubject: Subscriber 2: Error!"));
+
+        //PublishSubject is still emitting data stream
+        subject.onNext(4);
+        subject.onNext(5);
+
+        //PublishSubject completes emitting data stream
+        subject.onComplete();
     }
 
     @Override
