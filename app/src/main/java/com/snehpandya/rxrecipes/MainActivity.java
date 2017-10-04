@@ -16,6 +16,7 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.AsyncSubject;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.ReplaySubject;
@@ -526,6 +527,44 @@ public class MainActivity extends AppCompatActivity {
 
         //BehaviourSubject completes emitting data stream
         behaviorSubject.onComplete();
+
+        /*
+            **Async Subject**
+
+            AsyncSubject only emits last value of Observable,
+            "only after that source Observable completes".
+
+            !!Tip: No matter when the Subscriber subscribes,
+            it will only receive last emitted item, only after
+            Observable is completed emitting data stream.
+
+            *Example: Student enters at any point of time into
+            the classroom, but only wants to listen about the
+            last thing being taught, "after the class is over".
+        */
+
+        //Create new AsyncSubject
+        AsyncSubject<Integer> asyncSubject = AsyncSubject.create();
+
+        //Subscriber 1 subscribes to AsyncSubject
+        //Subscriber 1 will only receive last item
+        asyncSubject.subscribe(s -> Log.d(TAG, "onCreate: AsyncSubject: Subscriber 1: " + s), s -> Log.e(TAG, "onCreate: AsyncSubject: Subscriber 1: Error!"));
+
+        //AsyncSubject starts emitting data stream
+        asyncSubject.onNext(1);
+        asyncSubject.onNext(2);
+        asyncSubject.onNext(3);
+
+        //Subscriber 2 subscribes to AsyncSubject
+        //Subscriber 2 will only receive last item
+        asyncSubject.subscribe(d -> Log.d(TAG, "onCreate: AsyncSubject: Subscriber 2: " + d), d -> Log.e(TAG, "onCreate: AsyncSubject: Subscriber 2: Error!"));
+
+        //AsyncSubject is still emitting data stream
+        asyncSubject.onNext(4);
+        asyncSubject.onNext(5);
+
+        //AsyncSubject completes emitting data stream
+        asyncSubject.onComplete();
     }
 
     @Override
