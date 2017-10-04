@@ -17,6 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -421,28 +422,70 @@ public class MainActivity extends AppCompatActivity {
 
             !!Tip: Subscriber gets only the data
             from the moment it subscribes.
+
+            *Example: Student enters late into the
+            classroom and listens from the point of
+            time he entered.
         */
 
         //Create new PublishSubject
-        PublishSubject<Integer> subject = PublishSubject.create();
+        PublishSubject<Integer> publishSubject = PublishSubject.create();
 
         //Subscriber 1 subscribes to PublishSubject
-        subject.subscribe(s -> Log.d(TAG, "onCreate: PublishSubject: Subscriber 1: " + s), s -> Log.e(TAG, "onCreate: PublishSubject: Subscriber 1: Error!"));
+        publishSubject.subscribe(s -> Log.d(TAG, "onCreate: PublishSubject: Subscriber 1: " + s), s -> Log.e(TAG, "onCreate: PublishSubject: Subscriber 1: Error!"));
 
         //PublishSubject starts emitting data stream
-        subject.onNext(1);
-        subject.onNext(2);
-        subject.onNext(3);
+        publishSubject.onNext(1);
+        publishSubject.onNext(2);
+        publishSubject.onNext(3);
 
         //Subscriber 2 subscribes to PublishSubject
-        subject.subscribe(d -> Log.d(TAG, "onCreate: PublishSubject: Subscriber 2: " + d), d -> Log.e(TAG, "onCreate: PublishSubject: Subscriber 2: Error!"));
+        publishSubject.subscribe(d -> Log.d(TAG, "onCreate: PublishSubject: Subscriber 2: " + d), d -> Log.e(TAG, "onCreate: PublishSubject: Subscriber 2: Error!"));
 
         //PublishSubject is still emitting data stream
-        subject.onNext(4);
-        subject.onNext(5);
+        publishSubject.onNext(4);
+        publishSubject.onNext(5);
 
         //PublishSubject completes emitting data stream
-        subject.onComplete();
+        publishSubject.onComplete();
+
+        /*
+            **Replay Subject**
+
+            ReplaySubject emits all the items of
+            the source Observable, regardless of
+            when the Subscriber subscribes
+
+            !!Tip: Subscriber gets all the data
+            regardless of the time it subscribes
+
+            *Example: Student enters late into the
+            classroom and listens from the beginning.
+        */
+
+        //Create new ReplaySubject
+        ReplaySubject<Integer> replaySubject = ReplaySubject.create();
+
+        //Subscriber 1 subscribes to ReplaySubject
+        replaySubject.subscribe(s -> Log.d(TAG, "onCreate: ReplaySubject: Subscriber 1: " + s), s -> Log.e(TAG, "onCreate: ReplaySubject: Subscriber 1: Error!"));
+
+        //ReplaySubject starts emitting data stream
+        replaySubject.onNext(1);
+        replaySubject.onNext(2);
+        replaySubject.onNext(3);
+
+        //Subscriber 2 subscribes to ReplaySubject
+        replaySubject.subscribe(d -> Log.d(TAG, "onCreate: ReplaySubject: Subscriber 2: " + d), d -> Log.e(TAG, "onCreate: ReplaySubject: Subscriber 2: Error!"));
+
+        //ReplaySubject is still emitting data stream
+        replaySubject.onNext(4);
+        replaySubject.onNext(5);
+
+        //ReplaySubject completes emitting data stream
+        replaySubject.onComplete();
+
+        //Subscriber 3 subscribes to ReplaySubject
+        replaySubject.subscribe(a -> Log.d(TAG, "onCreate: ReplaySubject: Subscriber 3: " + a), a -> Log.e(TAG, "onCreate: ReplaySubject: Subscriber 3: Error!"));
     }
 
     @Override
