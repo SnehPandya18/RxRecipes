@@ -16,6 +16,7 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.ReplaySubject;
 
@@ -486,6 +487,45 @@ public class MainActivity extends AppCompatActivity {
 
         //Subscriber 3 subscribes to ReplaySubject
         replaySubject.subscribe(a -> Log.d(TAG, "onCreate: ReplaySubject: Subscriber 3: " + a), a -> Log.e(TAG, "onCreate: ReplaySubject: Subscriber 3: Error!"));
+
+        /*
+            **Behaviour Subject**
+
+            BehaviourSubject emits the most recently
+            emitted item and all the subsequent items
+            of the source Observable, when a Subscriber
+            subscribes to it.
+
+            !!Tip: Subscriber gets most recent item emitted,
+            then all subsequent items emitted by Observable.
+
+            *Example: Student enters late into the classroom
+            and wants to listen to the most recent things
+            (not from the beginning) being taught by the
+            professor so that he gets the idea of the context.
+        */
+
+        //Create new BehaviourSubject
+        BehaviorSubject<Integer> behaviorSubject = BehaviorSubject.create();
+
+        //Subscriber 1 subscribes to BehaviourSubject
+        behaviorSubject.subscribe(s -> Log.d(TAG, "onCreate: BehaviourSubject: Subscriber 1: " + s), s -> Log.e(TAG, "onCreate: BehaviourSubject: Subscriber 1: Error!"));
+
+        //BehaviourSubject starts emitting data stream
+        behaviorSubject.onNext(1);
+        behaviorSubject.onNext(2);
+        behaviorSubject.onNext(3);
+
+        //Subscriber 2 subscribes to BehaviourSubject
+        //Subscriber 2 will receive last item emitted
+        behaviorSubject.subscribe(d -> Log.d(TAG, "onCreate: BehaviourSubject: Subscriber 2: " + d), d -> Log.e(TAG, "onCreate: BehaviourSubject: Subscriber 2: Error!"));
+
+        //BehaviourSubject is still emitting data stream
+        behaviorSubject.onNext(4);
+        behaviorSubject.onNext(5);
+
+        //BehaviourSubject completes emitting data stream
+        behaviorSubject.onComplete();
     }
 
     @Override
