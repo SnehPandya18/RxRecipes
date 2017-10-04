@@ -179,6 +179,20 @@ public class MainActivity extends AppCompatActivity {
                         s -> Log.e(TAG, "onCreate: Flatmap returning particular item: Error!"));
 
         /*
+            **Observable.all() operator**
+
+            Determines whether all items meet some criteria
+
+            !!Tip: All of the Observable items must fulfill criteria
+        */
+
+        mDisposable = Observable.just(1, 2, 3, 4, 5, 6)
+                .all(i -> i > 0)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(s -> Log.d(TAG, "onCreate: All: " + s), Throwable::printStackTrace);
+
+        /*
             **Observable.from() operator**
 
             Takes a collection of objects/items and emits each of them, one at a time
